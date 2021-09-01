@@ -1,6 +1,7 @@
-import { Subject, interval, BehaviorSubject, ReplaySubject, fromEvent, of, AsyncSubject, asyncScheduler, asapScheduler, animationFrameScheduler, queueScheduler, async } from 'rxjs';
+import { Subject, interval, BehaviorSubject, ReplaySubject, fromEvent, of, AsyncSubject, asyncScheduler, asapScheduler, animationFrameScheduler, queueScheduler, async, onErrorResumeNext } from 'rxjs';
+import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 import { QueueScheduler } from 'rxjs/internal/scheduler/QueueScheduler';
-import { mergeMap, mergeMapTo, multicast, observeOn, refCount, share, shareReplay, subscribeOn, take, takeWhile, tap} from 'rxjs/operators';
+import { mergeMap, mergeMapTo, multicast, observeOn, refCount, share, shareReplay, subscribeOn, take, takeWhile, tap, timeInterval} from 'rxjs/operators';
 
     const observer = {
          next: val => console.log('next', val),
@@ -339,19 +340,66 @@ import { mergeMap, mergeMapTo, multicast, observeOn, refCount, share, shareRepla
 
      //#endregion
 
-    //#region 
+    //#region Execute tasks on a queue with Queue Scheduler
 
-    queueScheduler.schedule(()=>{
-             queueScheduler.schedule(()=>{
-                queueScheduler.schedule(()=>{console.log("Second Inner Queue")})
-                console.log("Inner Queue")
-                })
-            console.log("first queue Log");
-    });
+    // queueScheduler.schedule(()=>{
+    //          queueScheduler.schedule(()=>{
+    //             queueScheduler.schedule(()=>{console.log("Second Inner Queue")})
+    //             console.log("Inner Queue")
+    //             })
+    //         console.log("first queue Log");
+    // });
 
-    console.log("sync Log")
+    // console.log("sync Log")
 
     //#endregion
+
+//#endregion
+
+
+//#region Testing Observables with Marble testing
+
+    //#region Introduction to marble testing
+    //     '_' each dash represents a frame of virtual time
+    //     '[a-z0-9]' represents emitted values, ex. -a--b-
+    //     '#' represents errors, ex. -a--b-# 
+    //     '()' represents asynchronous groupings, ex. -(abc)--
+    //     '|' represents completion, ex. (abc|)
+
+    //#endregion
+
+    //#region Use the test scheduler to convert ASCII diagrams into observables
+
+        //     import{ TestScheduler } from 'rxjs/testing'
+
+// describe('Marbel testing in RxJS', ()=>{
+//      let testScheduler;
+     
+//      beforeEach(()=>{
+//          testScheduler = new TestScheduler((actual, expected)=>{
+//              expect(actual).toEqual(expected);
+//          })
+//      });
+//      it('Should convert ASCII diagrams into observables', ()=>{
+//          testScheduler.run(helpers=>{
+//              //All testing logic
+//              const {cold, expectObservable}= helpers;
+
+//              const source$ = cold('--a-b---c');
+//              const expected = '-a-b---c';
+//              expectObservable(source$).toBe(expected);
+//          })
+//      })
+
+// });
+ 
+
+//#endregion
+
+    //#region Configure emitted values within marble diagrams
+
+    //#endregion
+
 
 
 //#endregion
